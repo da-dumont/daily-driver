@@ -2,7 +2,7 @@
 
 A persistent Claude Code workspace for engineering leaders. Not a one-off AI session — an operating environment that accumulates context, connects to your tools, and gets better the more you use it.
 
-Built for a Director of Engineering at Constant Contact, but adaptable to any engineering leadership role.
+Built for a Director of Engineering, but adaptable to any engineering leadership role.
 
 ---
 
@@ -14,11 +14,17 @@ A daily driver is different. It's a workspace with memory (via files), opinions 
 
 The core insight: when you connect your tools, encode how you think, and let context accumulate over time, the whole becomes greater than the sum of its parts. Information has a lifecycle. Things don't fall through the cracks. Invisible work gets captured. The cognitive load of remembering, tracking, and connecting gets offloaded to something that's more consistent at it than you are.
 
+There are two compounding layers:
+
+- **Operational layer** — live data from Jira, PagerDuty, and Datadog. Daily briefings, triage, weekly ops reports. What's happening now.
+- **Knowledge layer** — an LLM-maintained wiki in `wiki/`. Every meeting you write up in Obsidian gets automatically compiled into structured pages: people you've met with, decisions made, themes that recur. It gets richer with every session without extra work from you.
+
 ---
 
 ## Prerequisites
 
 - [Claude Code](https://claude.ai/code) installed and authenticated
+- [Obsidian](https://obsidian.md) (free) — for writing and browsing your wiki
 - API access to:
   - **Atlassian** (Jira + Confluence) — one token covers both
   - **Datadog** — API key + App key
@@ -36,13 +42,25 @@ git clone git@github.com:da-dumont/daily-driver.git
 cd daily-driver
 ```
 
-1. Fill in `.mcp.json` with your credentials (see [MCP Setup](#mcp-setup))
-2. Update `context/team-roster.md` with your team structure
-3. Update `context/writing-style.md` with your voice preferences
-4. Update `context/principles.md` with leadership frameworks you want to apply
-5. Open Claude Code: `claude` in the project directory
+### 1. Configure integrations
+Fill in `.mcp.json` with your API credentials (see [MCP Setup](#mcp-setup)).
 
-That's it. Claude reads `CLAUDE.md` on every session and orients itself.
+### 2. Personalize your context
+- `context/team-roster.md` — your team structure
+- `context/writing-style.md` — your voice and tone preferences
+- `context/principles.md` — leadership frameworks you want Claude to apply
+
+### 3. Set up Obsidian for the wiki
+Open Obsidian → Manage Vaults → Open folder as vault → select `daily-driver/wiki/`
+
+Then configure Daily Notes + Templater (see [Wiki setup](#wiki-setup)).
+
+### 4. Start Claude Code
+```bash
+claude
+```
+
+Claude reads `CLAUDE.md` on every session and orients itself. Run `/morning` to begin.
 
 ---
 
@@ -63,12 +81,26 @@ daily-driver/
 ├── reports/
 │   ├── daily/                  # EOD summaries (one per day)
 │   └── weekly/                 # Weekly ops reports
+├── wiki/                       # LLM-maintained knowledge base (browse in Obsidian)
+│   ├── WIKI.md                 # Schema, conventions, ingest rules
+│   ├── hot.md                  # Hot cache — Claude reads this first every session
+│   ├── index.md                # Master catalog of all wiki pages
+│   ├── log.md                  # Append-only operation log
+│   ├── daily/                  # YOUR Obsidian Daily Notes (raw capture)
+│   ├── people/                 # One page per person — compounds with every meeting
+│   ├── concepts/               # Frameworks, mental models, recurring themes
+│   ├── research/               # Deep dives that accumulate over time
+│   ├── sources/                # Ingested articles and documents
+│   ├── questions/              # Filed answers worth keeping
+│   └── _templates/
+│       └── daily-note.md       # Obsidian daily note template
 └── .claude/
     └── commands/               # Slash command definitions
         ├── morning.md
         ├── eod.md
         ├── triage.md
-        └── weekly-ops.md
+        ├── weekly-ops.md
+        └── 1on1-prep.md
 ```
 
 ### `CLAUDE.md`
@@ -130,6 +162,96 @@ You never write these files manually — they're output from your workflows.
 ### `.claude/commands/`
 
 Slash command definitions. Each file is a prompt that tells Claude exactly what to do when you run that command. You can edit these to change the behavior, add new integrations, or adjust the output format.
+
+---
+
+## Wiki
+
+The `wiki/` directory is a persistent, LLM-maintained knowledge base that compounds over time. It's the second brain of the daily driver.
+
+**The core idea:** instead of re-reading raw notes every time you need context, Claude compiles your daily meeting notes into structured, interlinked pages. Ask about a person and Claude reads their page — every meeting, every commitment, every pattern — not just today's notes. The knowledge accumulates and cross-references automatically.
+
+**How it works:**
+
+- You write meeting notes in Obsidian's Daily Note (`wiki/daily/YYYY-MM-DD.md`) during or after meetings
+- `/eod` automatically ingests today's note before asking you anything — updating person pages, filing decisions, extracting action items
+- `/morning` ingests yesterday's note as a safety net if `/eod` was skipped
+- You never have to remember to run an ingest command
+
+**Hot cache:** `wiki/hot.md` is a ~500-word summary Claude overwrites after every wiki operation. It's always read first — recent people activity, active research threads, open commitments. This keeps Claude oriented across sessions without loading the full wiki every time.
+
+**What the wiki produces automatically:**
+
+| Directory | What goes there | How |
+|---|---|---|
+| `wiki/people/` | One page per person — meeting log, patterns, open commitments | Auto from daily notes |
+| `wiki/concepts/` | Frameworks and mental models that recur across meetings | Auto from daily notes |
+| `wiki/research/` | Deep dives on topics you're tracking over time | `/ingest` or auto |
+| `wiki/sources/` | Summaries of articles, docs, reports you've read | `/ingest` |
+| `wiki/questions/` | Answers to queries worth filing permanently | On demand |
+
+**Browsing:** Open Obsidian with `wiki/` as the vault. Graph view shows how people, decisions, and concepts link to each other. You read; Claude writes.
+
+See `wiki/WIKI.md` for the full schema, frontmatter conventions, and ingest rules.
+
+### Note capture templates
+
+The daily note template (`wiki/_templates/daily-note.md`) pre-loads five capture formats. Write naturally — the headers are what Claude uses as extraction signals.
+
+**1:1 meeting**
+```
+## 1:1 [Name] — [time]
+
+**Their agenda**
+**My agenda**
+**Key discussion**
+**Commitments**
+- Me:
+- Them:
+**Notes / observations**
+```
+
+**Strategy or planning meeting**
+```
+## [Meeting name] — [time]
+**Attendees:** [names]
+
+**Context**
+**Key discussion**
+**Decisions**
+- [decision, owner]
+**Open questions**
+**Actions**
+- [ ] [Owner]: [item]
+```
+
+**Team or all-hands meeting**
+```
+## [Meeting name] — [time]
+**Attendees:** [team or list]
+
+**Topics covered**
+**Signals / patterns**
+**Follow-ups**
+- [ ] [item]
+```
+
+**Async / informal note** (hallway conversation, Slack thread, quick observation)
+```
+## Note — [topic or person]
+
+[Freeform. Include names, decisions, or actions.]
+```
+
+**Research / reading note**
+```
+## Reading: [Title]
+**Source:** [URL or filename]
+
+[Key points, reactions, relevance to current work]
+```
+
+Missing sections are fine. Claude extracts what's there.
 
 ---
 
@@ -256,19 +378,20 @@ Generates interview questions mapped to competencies. Synthesizes debrief signal
 
 ### `/morning`
 
-Run at the start of every day. Pulls previous night's EOD notes, checks Jira for overdue tickets and new P1/P2 bugs, checks PagerDuty for overnight incidents, checks Datadog for monitor alerts, and applies a day-of-week focus nudge from `CLAUDE.md`.
+Run at the start of every day. Pulls previous night's EOD notes, checks Jira for overdue tickets and new P1/P2 bugs, checks PagerDuty for overnight incidents, checks Datadog for monitor alerts. Also ingests yesterday's daily note into the wiki if it wasn't already processed, and surfaces active wiki threads relevant to today.
 
-**Reads:** `reports/daily/` (yesterday), Jira, PagerDuty, Datadog
+**Reads:** `reports/daily/` (yesterday), Jira, PagerDuty, Datadog, `wiki/daily/` (yesterday), `wiki/hot.md`
+**Writes:** `wiki/people/`, `wiki/hot.md`, `wiki/log.md` (if yesterday's note wasn't yet ingested)
 **Output:** Structured briefing in the terminal
 
 ---
 
 ### `/eod`
 
-Run before you close the laptop. Silently gathers context first (what incidents happened today, what Jira tickets closed, what decisions were logged), then asks smart follow-up questions based on what it found. Captures your brain dump as action items in `inbox.md` and wins in the bragdoc. Saves a daily summary to `reports/daily/`.
+Run before you close the laptop. First, automatically ingests today's Obsidian Daily Note — updating wiki people pages, filing decisions, extracting action items — so its smart prompts are already informed by your actual meeting notes. Then asks targeted follow-up questions based on what it found in the note, Jira, and PagerDuty. Captures wins to the bragdoc and saves a daily summary.
 
-**Reads:** PagerDuty, Jira, `decisions/`, `reports/daily/` (today's morning)
-**Writes:** `inbox.md`, `bragdoc/YYYY-MM-DD.md`, `reports/daily/YYYY-MM-DD.md`
+**Reads:** `wiki/daily/` (today), `wiki/log.md`, PagerDuty, Jira, `decisions/`, `reports/daily/`
+**Writes:** `wiki/people/`, `wiki/hot.md`, `wiki/index.md`, `wiki/log.md`, `inbox.md`, `bragdoc/YYYY-MM-DD.md`, `reports/daily/YYYY-MM-DD.md`
 
 ---
 
@@ -290,6 +413,18 @@ Run on Fridays. Queries Jira for bug counts and SLA status by severity across te
 
 ---
 
+### `/1on1-prep [name]`
+
+Prepare for a 1:1 or key meeting with a specific person. Reads their full wiki page — every prior meeting, open commitments, growth arc, and patterns — then cross-references their recent Jira activity. Generates structured talking points. After the meeting, prompts for a 2-3 sentence summary and logs it back to their wiki page.
+
+If no wiki page exists for this person yet, it creates a stub automatically.
+
+**Reads:** `wiki/hot.md`, `wiki/people/[name].md`, Jira (if direct report)
+**Writes:** `wiki/people/[name].md`, `wiki/hot.md`, `wiki/log.md`
+**Output:** Follow-up items, what they likely want to discuss, development thread, one thing to listen for
+
+---
+
 ## Your daily workflow
 
 ### Morning
@@ -300,13 +435,21 @@ claude
 /morning
 ```
 
-You get a briefing: overnight incidents, Jira queue, today's focus. Anything on your mind goes directly into `inbox.md` — don't filter it, just capture it.
+You get a briefing: overnight incidents, Jira queue, active wiki threads, today's focus. Anything on your mind goes directly into `inbox.md` — don't filter it, just capture it.
+
+Before any meeting with a direct report or key stakeholder:
+
+```
+/1on1-prep [name]
+```
 
 ### During the day
 
-Work naturally. Use trigger phrases to shift into the role you need without declaring it. Jot thoughts, tasks, and ideas into `inbox.md` as they come up.
+In Obsidian, click the Daily Note button (or use the hotkey) to open today's note. Write during or right after each meeting using the templates pre-loaded in the file — a 1:1 block, a strategy meeting block, whatever applies. You don't need to be thorough; even rough notes are useful.
 
-When the inbox gets noisy, run `/triage`. It converts action items to Jira tickets and files reference material — you don't have to think about where things go.
+For tasks and ideas that aren't meeting notes, jot them in `inbox.md` as they come up.
+
+When the inbox gets noisy, run `/triage`. It converts action items to Jira tickets and files reference material.
 
 ### End of day
 
@@ -314,7 +457,7 @@ When the inbox gets noisy, run `/triage`. It converts action items to Jira ticke
 /eod
 ```
 
-Claude asks smart questions based on what actually happened — not a generic template. It knows if there was an incident, what you closed in Jira, what decisions you logged. Answer in plain language. It captures wins to the bragdoc and saves a daily summary that tomorrow's `/morning` will surface.
+Claude first reads today's Obsidian Daily Note and compiles it into the wiki — updating person pages, filing decisions, extracting action items to inbox — before asking you anything. Its follow-up questions are already informed by what you wrote: "I see you met with [name] today — anything worth adding beyond the notes?" Answer in plain language. Wins go to the bragdoc. The daily summary gets saved for tomorrow's briefing.
 
 ### Friday
 
@@ -322,23 +465,64 @@ Claude asks smart questions based on what actually happened — not a generic te
 /weekly-ops
 ```
 
-Full ops report in ~30 seconds. Bugs by severity, incidents, monitor health, SLAs at risk — formatted and saved. Use it to write your weekly R&D update or share it directly.
+Full ops report in ~30 seconds. Bugs by severity, incidents, monitor health, SLAs at risk — formatted and saved.
 
 ### The loop
 
 ```
-/morning → surfaces yesterday's open loops
+Obsidian Daily Note → you write meeting notes during the day
   ↓
-Work the day → inbox captures what comes up
+/eod → auto-ingests today's note into wiki, then captures wins + actions
+  ↓
+/morning → ingests yesterday as safety net, surfaces wiki threads + Jira + incidents
+  ↓
+/1on1-prep → pulls full wiki history before key meetings
   ↓
 /triage → inbox becomes Jira tickets
-  ↓
-/eod → captures wins and saves daily summary
-  ↓
-/morning → surfaces tonight's notes tomorrow
 ```
 
-The bragdoc fills itself as a side effect. Decisions accumulate in `decisions/`. Nothing slips through.
+The wiki compounds with every session. The bragdoc fills itself. Decisions accumulate. Nothing slips through.
+
+---
+
+## Wiki setup
+
+The wiki uses Obsidian as the browsing layer and Templater for daily note automation. No MCP server required — Claude reads and writes the wiki files directly.
+
+### 1. Open the vault in Obsidian
+
+Obsidian → Manage Vaults → Open folder as vault → select `daily-driver/wiki/`
+
+### 2. Install Templater
+
+Settings → turn off Restricted Mode → Community plugins → Browse → search **Templater** → install → enable
+
+Settings → Templater:
+- Template folder location: `_templates`
+- Enable **Trigger Templater on new file creation**: on
+
+### 3. Configure Daily Notes
+
+Settings → Core plugins → **Daily notes** → enable
+
+Settings → Daily notes:
+- New file location: `daily`
+- Template file location: `_templates/daily-note`
+- Date format: `YYYY-MM-DD`
+
+### 4. Install optional plugins
+
+Community plugins → install and enable:
+- **Dataview** — run queries over page frontmatter, build dynamic dashboards
+- **Graph Analysis** — enhanced graph view showing connection strength
+
+### 5. Optional: Obsidian Web Clipper
+
+Install the [Obsidian Web Clipper](https://obsidian.md/clipper) browser extension. It converts web articles to markdown — save directly to `wiki/daily/` and Claude will ingest them on your next `/eod`.
+
+### How it works day-to-day
+
+Each morning (or when your first meeting starts): click the Daily Note icon or use the hotkey. Obsidian creates `wiki/daily/YYYY-MM-DD.md` pre-populated with the five capture templates. Write during or after each meeting. Run `/eod` at the end of the day — it handles everything else automatically.
 
 ---
 
@@ -395,9 +579,17 @@ Create a new `.md` file in `.claude/commands/`. Describe what Claude should do s
 
 Drop any `.md` file into `context/` and reference it in the relevant role in `CLAUDE.md`. Good candidates: org chart, competitor landscape, product principles, team norms, a vendor evaluation, anything you'd want available across conversations.
 
+### Extending the wiki
+
+Add new wiki directories for domains specific to your role. Good candidates: `wiki/orgs/` for org structure tracking, `wiki/vendors/` for vendor relationships, `wiki/initiatives/` for multi-quarter projects. Add any new directory to the file map in `CLAUDE.md` and the ingest rules in `wiki/WIKI.md`.
+
+To ingest a source on demand (article, doc, report): drop it in `wiki/daily/` with a `## Reading:` header, or paste directly into a daily note. `/eod` will pick it up.
+
+To lint the wiki (find orphaned pages, stale open items, missing cross-references): say "lint the wiki" in a Claude session — it reads the index, checks for gaps, and suggests cleanup.
+
 ### Start small
 
-You don't need all 11 roles and 4 commands on day one. Start with 1-2 roles that address your biggest friction points and the `/morning` + `/eod` loop. Add more as new patterns emerge. The overhead of maintaining something you don't use will outweigh any benefit from having it.
+You don't need all 11 roles and 5 commands on day one. Start with the `/morning` + `/eod` loop and write a few daily notes. The wiki will start compounding automatically. Add roles and commands as specific friction points emerge.
 
 ---
 
