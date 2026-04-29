@@ -8,7 +8,10 @@ Ideas and potential additions. Not commitments — a backlog to pull from when s
 
 ## In progress / next up
 
-*(move items here when actively working on them)*
+### LLM Wiki — integrated knowledge base
+**What:** Persistent wiki in `wiki/` with Obsidian as the browsing layer. Daily notes auto-ingested by `/eod` and `/morning`. People pages compound with every meeting. Hot cache keeps Claude oriented across sessions.
+**Status:** Scaffold complete. Needs Obsidian setup (Templater, Daily Notes plugin) and first daily note to validate end-to-end.
+**Remaining:** Obsidian configuration (user action), first real daily note ingest, `/1on1-prep` validation.
 
 ---
 
@@ -74,17 +77,7 @@ Ideas and potential additions. Not commitments — a backlog to pull from when s
 ---
 
 ### 1:1 tracking
-
-**What:** A `1on1s/` directory with a file per direct report. Running notes: what was discussed, commitments made, development goal progress. A `/1on1-prep` command that loads a person's file, checks their recent Jira activity, and generates talking points.
-
-**Why:** Right now coaching conversations are captured loosely in `/eod`. A structured 1:1 layer builds a longitudinal view of each person's growth — invaluable for performance reviews, promotion cases, and coaching continuity.
-
-**Workflow:**
-- Before the meeting: `/1on1-prep [name]` → talking points + recent activity
-- After the meeting: `/eod` appends summary to their file
-- At review time: load their file for a full arc of the relationship
-
-**Files:** `1on1s/` directory, `.claude/commands/1on1-prep.md`, update `/eod` to append to 1:1 files
+**Status: Shipped** — Now handled by the LLM wiki. People pages in `wiki/people/` track all meetings (not just 1:1s). Use `/1on1-prep [name]` before any meeting with a direct report or key stakeholder.
 
 ---
 
@@ -137,3 +130,7 @@ Ideas and potential additions. Not commitments — a backlog to pull from when s
 - [x] Career bragdoc — LinkSquares highlight reel, career-highlights from resume
 - [x] README — full documentation for open-source sharing
 - [x] GitHub remote — `github.com/da-dumont/daily-driver`
+- [x] LLM wiki scaffold — `wiki/` with hot cache, index, log, people/concepts/research/sources/questions dirs
+- [x] Daily note template — `wiki/_templates/daily-note.md` with all five capture formats + Templater header
+- [x] `/1on1-prep` command — wiki-aware meeting prep with post-meeting logging
+- [x] `/eod` + `/morning` updated — auto-ingest daily notes, surface wiki threads in briefing

@@ -18,7 +18,19 @@ Run the following steps silently in sequence, then produce a single structured b
    - Any monitors in ALERT or WARN state
    - SLO breach risk (anything <99% over last 7 days)
 
-5. **Day-of-week nudge** — Check today's day against the schedule in CLAUDE.md and include the relevant focus reminder.
+5. **Process yesterday's daily note (safety net)**
+Check `wiki/log.md` — was yesterday's daily note (`wiki/daily/YYYY-MM-DD.md` for yesterday) already ingested?
+
+If NOT ingested:
+- Run the same ingest flow as /eod Step 0 on yesterday's note
+- Update people pages, inbox, decisions, concepts as needed
+- Update wiki/log.md, wiki/index.md, overwrite wiki/hot.md
+
+If already ingested:
+- Read `wiki/hot.md` and surface any active threads or open items relevant to today
+  (people you're meeting today who have open commitments, active research threads, etc.)
+
+6. **Day-of-week nudge** — Check today's day against the schedule in CLAUDE.md and include the relevant focus reminder.
 
 ## Output Format
 
@@ -33,6 +45,9 @@ Run the following steps silently in sequence, then produce a single structured b
 
 ### Jira queue
 [Overdue / due today / P1-P2 new bugs]
+
+### Wiki threads
+[Active research threads or open commitments from wiki/hot.md relevant to today — or omit if nothing relevant]
 
 ### Today's focus
 [Day-of-week nudge from CLAUDE.md]

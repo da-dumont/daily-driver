@@ -146,11 +146,35 @@ When querying integrations, always state what you're querying and surface the ra
 
 ---
 
+## Wiki
+
+A persistent, compounding knowledge base in `wiki/`. Every meeting logged in Obsidian Daily Notes gets automatically compiled into structured pages by `/eod` and `/morning`. Never write wiki pages manually — Claude maintains them.
+
+### Hot cache (always read first)
+At session start, read `wiki/hot.md` before anything else. Before any wiki query, read `wiki/hot.md` first — it answers most recent-context questions in ~500 tokens. After any wiki write operation, **overwrite `wiki/hot.md` entirely** — never append to it.
+
+### Tiered reading
+1. `wiki/hot.md` — recent context, active threads (~500 tokens)
+2. `wiki/index.md` — find which pages are relevant (~1000 tokens)
+3. Individual pages — drill in as needed (100–300 tokens each)
+
+### Daily Note path
+`wiki/daily/YYYY-MM-DD.md` — Obsidian writes here, Claude reads and ingests here. See `wiki/WIKI.md` for full schema and ingest rules.
+
+### Role integrations
+- **[Coach]** — load `wiki/people/[name].md` before any 1:1 or feedback conversation
+- **[Strategist]** — check `wiki/concepts/` for relevant frameworks; check person pages for anyone in the discussion
+- **[Research]** — check `wiki/research/` before starting a deep dive; file findings there after
+- **[IC]** — check person pages for anyone involved in the incident
+
+---
+
 ## Slash Commands
 
 | Command | What it does |
 |---|---|
-| `/morning` | Start-of-day briefing: overnight incidents, Jira queue, day-of-week nudge |
-| `/eod` | End-of-day capture: smart prompts, inbox append, bragdoc, daily report |
+| `/morning` | Start-of-day briefing: overnight incidents, Jira queue, wiki threads, day-of-week nudge |
+| `/eod` | Auto-ingests today's daily note, then captures wins/actions, bragdoc, daily report |
 | `/triage` | Process inbox.md → Jira tickets + reference files |
 | `/weekly-ops` | Full ops report: Jira bugs, PagerDuty incidents, Datadog health |
+| `/1on1-prep [name]` | Pull full wiki history for a person, generate meeting prep, log summary after |
