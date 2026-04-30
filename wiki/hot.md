@@ -18,6 +18,8 @@ last_operation: concept-write
 
 ## Concepts (full library)
 
+- **CTCT in an Agent-Driven World** — CC becomes execution infrastructure; agents orchestrate, CC executes; needs composable primitives, control plane, clean data layer; commoditization avoided via deliverability, compliance, trust. Includes worked re-engagement use case with tool call schemas.
+
 - **Builder Manifesto** — 15 principles; bottleneck is judgment/delivery, shorten idea-to-learning loop
 - **PR as the Bottleneck** — 4-phase operating model; correctness = system property, review = judgment layer
 - **Continuous Coordination** — 6 principles; replace batch sync with always-on context/intent sharing; big loop (weekly) + small loop (daily)
