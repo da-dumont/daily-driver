@@ -1,6 +1,6 @@
 ---
 updated: 2026-04-29
-last_operation: project-write
+last_operation: concept-write
 ---
 
 # Hot Cache
@@ -13,13 +13,16 @@ last_operation: project-write
 
 ## Active threads
 
-- **First 30 Days plan** — active. Pre-start checklist has open items before May 4. Week 1 is oriented around listening: Tim, Shane, Lejin, autonomous team structure.
-- Key principle from plan: assess data foundation readiness before pushing agent work — agents on messy data erode trust fast.
+- **First 30 Days plan** — active. Pre-start checklist has open items before May 4.
+- Key principle: assess data foundation readiness before pushing agent work.
 
-## Concepts
+## Concepts (full library)
 
 - **Builder Manifesto** — 15 principles; bottleneck is judgment/delivery, shorten idea-to-learning loop
 - **PR as the Bottleneck** — 4-phase operating model; correctness = system property, review = judgment layer
+- **Continuous Coordination** — 6 principles; replace batch sync with always-on context/intent sharing; big loop (weekly) + small loop (daily)
+- **AI-Native SDLC** — clarity → exploration → convergence → commit → validate → ship; includes tactical playbook
+- **Problem Brief** — primary clarity artifact; template for problem, evidence, hypothesis, success criteria
 
 ## Open items to follow up
 

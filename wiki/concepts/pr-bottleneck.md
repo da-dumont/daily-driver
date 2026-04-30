@@ -7,6 +7,7 @@ tags: [engineering, delivery, CI, review, velocity, automation]
 status: mature
 related:
   - "[[Builder Manifesto]]"
+  - "[[AI-Native SDLC]]"
 ---
 
 # PR as the Bottleneck

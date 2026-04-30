@@ -7,6 +7,8 @@ tags: [engineering, delivery, velocity, judgment, prototyping, CI, review, learn
 status: mature
 related:
   - "[[PR as the Bottleneck]]"
+  - "[[Continuous Coordination]]"
+  - "[[AI-Native SDLC]]"
 ---
 
 # Builder Manifesto

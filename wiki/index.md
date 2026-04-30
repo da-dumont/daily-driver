@@ -14,6 +14,9 @@ Master catalog of all pages. Updated by Claude after every ingest or wiki write 
 
 - [[Builder Manifesto]] — bottleneck has moved from execution to judgment/delivery; shorten the idea-to-learning loop (type: concept) updated: 2026-04-29
 - [[PR as the Bottleneck]] — AI sped up code writing, not review; make review less necessary via small PRs, CI validation, risk-based merge (type: concept) updated: 2026-04-29
+- [[Continuous Coordination]] — replace batch sync with always-on context sharing; 6 principles, two loops (big/small) (type: concept) updated: 2026-04-29
+- [[AI-Native SDLC]] — new work loop: clarity → exploration → convergence → commit → validate → ship (type: concept) updated: 2026-04-29
+- [[Problem Brief]] — primary clarity artifact; defines problem, evidence, hypothesis, success criteria before any building starts (type: concept) updated: 2026-04-29
 
 ## Projects
 
