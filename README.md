@@ -199,6 +199,9 @@ See `wiki/WIKI.md` for the full schema, frontmatter conventions, and ingest rule
 The daily note template (`wiki/_templates/daily-note.md`) pre-loads five capture formats. Write naturally — the headers are what Claude uses as extraction signals.
 
 **1:1 meeting**
+
+If the person has a wiki page, link their name directly in the header: `## 1:1 [[Tim Thornton]] — 9am`. Obsidian makes it clickable; Claude uses it as a stronger extraction signal.
+
 ```
 ## 1:1 [Name] — [time]
 
@@ -510,13 +513,25 @@ Settings → Daily notes:
 - Template file location: `_templates/daily-note`
 - Date format: `YYYY-MM-DD`
 
-### 4. Install optional plugins
+### 4. Prevent stray files from wiki links
+
+By default, clicking an unresolved `[[wiki link]]` creates the file in the vault root, not in the right subdirectory.
+
+Settings → Files & Links:
+- **Default location for new notes**: "In the folder specified below" → `wiki`
+- **New link format**: "Relative path from current file"
+
+This ensures auto-created files land in `wiki/` rather than the project root. For people pages specifically, Claude creates those — don't click unresolved person links until Claude has created the page.
+
+> **Note:** If you see stray `.md` files appearing at the project root (e.g. `Continuous Coordination.md`), this setting wasn't applied. Delete them — the real files are in `wiki/concepts/`.
+
+### 5. Install optional plugins
 
 Community plugins → install and enable:
 - **Dataview** — run queries over page frontmatter, build dynamic dashboards
 - **Graph Analysis** — enhanced graph view showing connection strength
 
-### 5. Optional: Obsidian Web Clipper
+### 6. Optional: Obsidian Web Clipper
 
 Install the [Obsidian Web Clipper](https://obsidian.md/clipper) browser extension. It converts web articles to markdown — save directly to `wiki/daily/` and Claude will ingest them on your next `/eod`.
 
