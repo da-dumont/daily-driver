@@ -5,4 +5,7 @@ Process with `/triage` — don't work from here directly.
 
 ---
 
-- [ ] Be at work in-person Monday May 4, 2026 @ 9am — from 2026-04-28
+- [ ] Write down Shane Franklin pre-start alignment points — overdue as of 2026-05-04
+- [ ] Research CTCT public AI surface area — overdue as of 2026-05-04
+- [ ] Identify key product/design players — overdue as of 2026-05-04
+- [ ] Schedule Week 1 meetings: Shane Franklin, Lejin Tan — from 2026-05-04

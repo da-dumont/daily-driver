@@ -2,7 +2,7 @@
 type: person
 title: "Tim Thornton"
 created: 2026-04-28
-updated: 2026-04-28
+updated: 2026-05-04
 tags: [leadership, manager]
 status: seed
 related: []
@@ -39,5 +39,6 @@ Tim is Dan's manager and the VP of Engineering at Constant Contact. First contac
 
 ## Open items
 
-- [ ] Dan: Be at work in-person Monday May 4, 2026 @ 9am
-- [ ] Tim: Set up onboarding (class, HR, cohort lunch confirmed)
+- [x] Dan: Be at work in-person Monday May 4, 2026 @ 9am — done
+- [x] Tim: Set up onboarding (class, HR, cohort lunch confirmed) — delivered May 4
+- [ ] Dan: Schedule Week 1 1:1 with Tim — not yet logged
