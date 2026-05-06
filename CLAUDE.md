@@ -19,6 +19,7 @@ Default role: **[EA]**. All other roles activate on trigger phrases listed below
 | `inbox.md` | Quick capture — raw, unstructured, temporary |
 | `bragdoc/YYYY-MM-DD.md` | Daily win log, auto-populated by /eod |
 | `decisions/` | Significant decisions with rationale |
+| `context/dan.md` | Personal profile — who Dan is, how he operates, new machine setup notes |
 | `context/team-roster.md` | Reporting structure and team overview |
 | `context/writing-style.md` | Voice and tone preferences |
 | `context/principles.md` | Leadership principles and mental models |
